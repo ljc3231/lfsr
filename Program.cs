@@ -232,9 +232,41 @@ class Program
         }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <param name="args"> triplebits <seed> <tap> <step> <iteration></param>
     static void TripleBits(string[] args)
     {
-        Console.WriteLine("TripleBits logic goes here.");
+        
+
+        string seed = args[1];
+        int tap = int.Parse(args[2]);
+        int step = int.Parse(args[3]);
+        int iter = int.Parse(args[4]);
+
+        Console.WriteLine($"{seed} - seed");
+        string currSeed = seed;
+        //iter loop
+        for(int i = 0; i < iter; i++){
+            
+            int acc = 1;
+
+            // Console.WriteLine($"Iteration: {i + 1}");
+
+            //step loop
+            for(int j = 0; j< step; j++){
+                currSeed = Cipher(new string[] {"Cipher", currSeed, tap.ToString()});
+                int rightmost = currSeed[currSeed.Length-1] - '0'; // convert char to int
+                acc = acc * 3 + rightmost;
+
+                //Console.WriteLine($"Step {j + 1}: Seed: {currSeed}, Accumulated Value: {acc}");
+                
+            }
+            Console.WriteLine($"{currSeed} {acc}");
+
+        }
+
     }
 
     static void EncryptImage(string[] args)
