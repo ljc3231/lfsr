@@ -12,3 +12,4 @@ C:\Users\blue3\Documents\CoPADS\lfsr\obj\Debug\net8.0\refint\lfsr.dll
 C:\Users\blue3\Documents\CoPADS\lfsr\obj\Debug\net8.0\lfsr.pdb
 C:\Users\blue3\Documents\CoPADS\lfsr\obj\Debug\net8.0\lfsr.genruntimeconfig.cache
 C:\Users\blue3\Documents\CoPADS\lfsr\obj\Debug\net8.0\ref\lfsr.dll
+C:\Users\blue3\Documents\CoPADS\lfsr\obj\Debug\net8.0\lfsr.sourcelink.json

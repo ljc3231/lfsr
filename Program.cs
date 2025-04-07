@@ -139,20 +139,97 @@ class Program
 
             Console.WriteLine($"keystream: {keystream}, plaintext: {plaintext}");
 
+            string ciphertext = "";
 
 
+            if(plaintext.Length >= keystream.Length ){
+                //plaintext longer than keystream
+                //pad plaintext (w/ 0 on right) to len of keystream
+                //will do no padding if lengths are equal
+                //Loop through keystream until ciphertext complete
+                string paddedstream = keystream.PadLeft(plaintext.Length, '0');
 
+                for(int j = 0; j < paddedstream.Length; j++){
+                    char plaintextBit = plaintext[j];
+                    char keyStreamBit = paddedstream[j];
+                    // 0 if true, 1 otherwise
+                    char newBit = (plaintextBit == keyStreamBit) ? '0' : '1';
+                    ciphertext += newBit;
+                }
 
+            }else{
+                //plaintext shorter or equal in len to keystream
+                //loop through plaintext until ciphertext complete
+                string paddedPlain = plaintext.PadLeft(keystream.Length, '0');
+
+                for(int j = 0; j < paddedPlain.Length; j++){
+                    char plaintextBit = paddedPlain[j];
+                    char keyStreamBit = keystream[j];
+                    char newBit = (plaintextBit == keyStreamBit) ? '0' : '1';
+                    ciphertext += newBit;
+                }
+
+            }
+            Console.WriteLine($"The ciphertext is: {ciphertext}");
 
         }else{
             throw new FileNotFoundException($"\"keystream.txt\" not found in working directory: {dirPath}.");
         }
-
     }
 
     static void Decrypt(string[] args)
     {
-        Console.WriteLine("Decrypt logic goes here.");
+        Console.WriteLine("Decrypt:");
+
+        string dirPath = Directory.GetCurrentDirectory();
+        string filename = "keystream.txt";
+
+        string[] files = Directory.GetFiles(dirPath, filename);
+
+        string ciphertext = args[1];
+
+        if(files.Length > 0){
+            //file found
+            string keystream = File.ReadAllText(files[0]);
+
+            Console.WriteLine($"keystream: {keystream}, ciphertext: {ciphertext}");
+
+            string plaintext = "";
+
+
+            if(ciphertext.Length >= keystream.Length ){
+                //plaintext longer than keystream
+                //pad plaintext (w/ 0 on right) to len of keystream
+                //will do no padding if lengths are equal
+                //Loop through keystream until ciphertext complete
+                string paddedstream = keystream.PadLeft(ciphertext.Length, '0');
+
+                for(int j = 0; j < paddedstream.Length; j++){
+                    char ciphertextBit = ciphertext[j];
+                    char keyStreamBit = paddedstream[j];
+                    // 0 if true, 1 otherwise
+                    char newBit = (ciphertextBit == keyStreamBit) ? '0' : '1';
+                    plaintext += newBit;
+                }
+
+            }else{
+                //plaintext shorter or equal in len to keystream
+                //loop through plaintext until ciphertext complete
+                string paddedCipher = ciphertext.PadLeft(keystream.Length, '0');
+
+                for(int j = 0; j < paddedCipher.Length; j++){
+                    char plaintextBit = paddedCipher[j];
+                    char keyStreamBit = keystream[j];
+                    char newBit = (plaintextBit == keyStreamBit) ? '0' : '1';
+                    plaintext += newBit;
+                }
+
+            }
+            Console.WriteLine($"The plaintext is: {plaintext}");
+
+        }else{
+            throw new FileNotFoundException($"\"keystream.txt\" not found in working directory: {dirPath}.");
+        }
     }
 
     static void TripleBits(string[] args)
