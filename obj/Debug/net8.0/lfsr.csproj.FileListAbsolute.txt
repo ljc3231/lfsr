@@ -1,0 +1,14 @@
+C:\Users\blue3\Documents\CoPADS\lfsr\bin\Debug\net8.0\lfsr.exe
+C:\Users\blue3\Documents\CoPADS\lfsr\bin\Debug\net8.0\lfsr.deps.json
+C:\Users\blue3\Documents\CoPADS\lfsr\bin\Debug\net8.0\lfsr.runtimeconfig.json
+C:\Users\blue3\Documents\CoPADS\lfsr\bin\Debug\net8.0\lfsr.dll
+C:\Users\blue3\Documents\CoPADS\lfsr\bin\Debug\net8.0\lfsr.pdb
+C:\Users\blue3\Documents\CoPADS\lfsr\obj\Debug\net8.0\lfsr.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\blue3\Documents\CoPADS\lfsr\obj\Debug\net8.0\lfsr.AssemblyInfoInputs.cache
+C:\Users\blue3\Documents\CoPADS\lfsr\obj\Debug\net8.0\lfsr.AssemblyInfo.cs
+C:\Users\blue3\Documents\CoPADS\lfsr\obj\Debug\net8.0\lfsr.csproj.CoreCompileInputs.cache
+C:\Users\blue3\Documents\CoPADS\lfsr\obj\Debug\net8.0\lfsr.dll
+C:\Users\blue3\Documents\CoPADS\lfsr\obj\Debug\net8.0\refint\lfsr.dll
+C:\Users\blue3\Documents\CoPADS\lfsr\obj\Debug\net8.0\lfsr.pdb
+C:\Users\blue3\Documents\CoPADS\lfsr\obj\Debug\net8.0\lfsr.genruntimeconfig.cache
+C:\Users\blue3\Documents\CoPADS\lfsr\obj\Debug\net8.0\ref\lfsr.dll
