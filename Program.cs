@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using SkiaSharp;
 
 class Program
 {
@@ -47,13 +48,13 @@ class Program
     {
         Console.WriteLine("Usage: dotnet run <option> <other arguments>");
         Console.WriteLine("Options:");
-        Console.WriteLine("  Cipher");
-        Console.WriteLine("  GenerateKeystream");
-        Console.WriteLine("  Encrypt");
-        Console.WriteLine("  Decrypt");
-        Console.WriteLine("  TripleBits");
-        Console.WriteLine("  EncryptImage");
-        Console.WriteLine("  DecryptImage");
+        Console.WriteLine("  Cipher <seed> <tap>");
+        Console.WriteLine("  GenerateKeystream <seed> <tap> <step>");
+        Console.WriteLine("  Encrypt <plaintext>");
+        Console.WriteLine("  Decrypt <ciphertext>");
+        Console.WriteLine("  TripleBits <seed> <tap> <step> <iteration>");
+        Console.WriteLine("  EncryptImage <imagefile> <seed> <tap>");
+        Console.WriteLine("  DecryptImage <imagefile> <seed> <tap>");
     }
 
     /// <summary>
@@ -271,12 +272,117 @@ class Program
 
     static void EncryptImage(string[] args)
     {
-        Console.WriteLine("EncryptImage logic goes here.");
+        Console.WriteLine("EncryptImage:");
+        string filename = args[1];
+        string seed = args[2];
+        int tap = int.Parse(args[3]);
+
+        string dirPath = Directory.GetCurrentDirectory();
+        string[] files = Directory.GetFiles(dirPath, filename);
+
+        if(files.Length == 0){
+            throw new FileNotFoundException($"File: \"{filename}\" not found in working directory");
+        }
+
+        string imgPath = files[0];
+
+        using var stream = File.OpenRead(imgPath);
+        using var skStream = new SKManagedStream(stream);
+        SKBitmap bitmap = SKBitmap.Decode(skStream);
+
+        SKBitmap encryptedBitMap = new SKBitmap(bitmap.Width, bitmap.Height);
+
+        //row major
+        //col
+        string currSeed = seed;
+        for(int y = 0; y < bitmap.Height; y++){
+            //row
+            for(int x = 0; x < bitmap.Width; x++){
+                
+                SKColor color = bitmap.GetPixel(x, y);
+
+                byte red = color.Red;
+                byte green = color.Green;
+                byte blue = color.Blue;
+
+                int seedInt = Convert.ToInt32(currSeed, 2);
+                Random rng = new Random(seedInt);
+                byte randByte = (byte)rng.Next(0, 256); //random 8 bit unsigned
+
+                byte newR = (byte)(red ^ randByte);
+                byte newG = (byte)(green ^ randByte);
+                byte newB = (byte)(blue ^ randByte);
+
+                encryptedBitMap.SetPixel(x, y, new SKColor(newR, newG, newB));
+
+            
+                //set new seed for next pixel
+                currSeed = Cipher(new string[] {"Cipher", currSeed, tap.ToString()});
+            }
+
+        }
+        using (var outStream = File.OpenWrite($"{Path.GetFileNameWithoutExtension(filename)}Encrypted.png")){
+                encryptedBitMap.Encode(outStream, SKEncodedImageFormat.Png,100);        
+            }
+    
     }
 
     static void DecryptImage(string[] args)
     {
-        Console.WriteLine("DecryptImage logic goes here.");
+        Console.WriteLine("DecryptImage:");
+        string filename = args[1];
+        string seed = args[2];
+        int tap = int.Parse(args[3]);
+
+        string dirPath = Directory.GetCurrentDirectory();
+        string[] files = Directory.GetFiles(dirPath, filename);
+
+        if(files.Length == 0){
+            throw new FileNotFoundException($"File: \"{filename}\" not found in working directory");
+        }
+
+        string imgPath = files[0];
+
+        using var stream = File.OpenRead(imgPath);
+        using var skStream = new SKManagedStream(stream);
+        SKBitmap bitmap = SKBitmap.Decode(skStream);
+
+        SKBitmap encryptedBitMap = new SKBitmap(bitmap.Width, bitmap.Height);
+
+        //row major
+        //col
+        string currSeed = seed;
+        for(int y = 0; y < bitmap.Height; y++){
+            //row
+            for(int x = 0; x < bitmap.Width; x++){
+                
+                SKColor color = bitmap.GetPixel(x, y);
+
+                byte red = color.Red;
+                byte green = color.Green;
+                byte blue = color.Blue;
+
+                int seedInt = Convert.ToInt32(currSeed, 2);
+                Random rng = new Random(seedInt);
+                byte randByte = (byte)rng.Next(0, 256); //random 8 bit unsigned
+
+                byte newR = (byte)(red ^ randByte);
+                byte newG = (byte)(green ^ randByte);
+                byte newB = (byte)(blue ^ randByte);
+
+                encryptedBitMap.SetPixel(x, y, new SKColor(newR, newG, newB));
+
+            
+                //set new seed for next pixel
+                currSeed = Cipher(new string[] {"Cipher", currSeed, tap.ToString()});
+            }
+
+        }
+        using (var outStream = File.OpenWrite($"{Path.GetFileNameWithoutExtension(filename).Replace("Encrypted", "")}NEW.png")){
+            encryptedBitMap.Encode(outStream, SKEncodedImageFormat.Png, 100);        
+        }
+
+
     }
 }
 
